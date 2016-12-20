@@ -1,0 +1,8 @@
+body {
+  padding-top: 50px;
+}
+
+#nav-space {
+  display: flex;
+  justify-content: center;
+}
