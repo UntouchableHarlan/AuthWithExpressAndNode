@@ -6,6 +6,14 @@ var engine = require('ejs-mate');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var routes = require('./routes/index.js');
+var session = require('express-session');
+
+//use sessions for tracking logins
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: false
+}));
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/bookworm");
