@@ -17,6 +17,28 @@ var userSchema = new mongoose.Schema({
     required: true
   }
 });
+
+// authenticate input against user databases
+userSchema.statics.authenticate = function(email, password, callback) {
+  User.findOne({ email: email })
+    .exec(function(err, user) {
+      if (error) {
+        return callback(error)
+      } else if ( !user ) {
+        var err = new Error('User not found');
+        err.status = 401;
+        return callback(err);
+      }
+      bcrypt.compare(password, user.password, function(error, result) {
+        if (result === true) {
+          return callback(callback, user);
+        } else {
+          return callback();
+        }
+      })
+    })
+}
+
 // hash function
 userSchema.pre('save', function(next) {
   var user = this;

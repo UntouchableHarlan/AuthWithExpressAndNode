@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var routes = require('./routes/index.js');
 var session = require('express-session');
+var pg = require('pg');
+var pgSession = require('connect-pg-simple')(session);
 
 //use sessions for tracking logins
 app.use(session({
@@ -14,6 +16,12 @@ app.use(session({
   resave: true,
   saveUninitialized: false
 }));
+
+//make user id available in templates
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.session.userId;
+  next();
+})
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/bookworm");
