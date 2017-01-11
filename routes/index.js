@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User  = require('../models/user');
+var mid = require('../middleware');
 
 router.get('/', function(req, res, next) {
   return res.render('index');
@@ -14,7 +15,7 @@ router.get('/contact', function(req, res, next) {
   return res.render('contact');
 });
 
-router.get('/register', function(req, res, next) {
+router.get('/register', mid.loggedOut, function(req, res, next) {
   return res.render('register');
 })
 
@@ -51,7 +52,7 @@ router.post('/register', function(req, res, next) {
   }
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/login', mid.loggedOut, function(req, res, next) {
   return res.render('login');
 });
 
@@ -75,7 +76,7 @@ router.post('/login', function(req, res, next) {
   }
 });
 
-router.get('/profile', function(req, res, next) {
+router.get('/profile', mid.requiresLogIn, function(req, res, next) {
   if (!req.session.userId) {
     var err = new Error('Please login to view your profile');
     err.status = 403;
